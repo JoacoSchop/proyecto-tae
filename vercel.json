@@ -1,0 +1,7 @@
+{
+  "framework": null,
+  "buildCommand": "node build-frontend.js",
+  "outputDirectory": "Front",
+  "redirects": [{ "source": "/", "destination": "/1/index.html", "permanent": false }],
+  "rewrites": [{ "source": "/Front/:path*", "destination": "/:path*" }]
+}

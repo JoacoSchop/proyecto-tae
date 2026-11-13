@@ -217,4 +217,4 @@ subscribePOSTEvent("devolver-reliquias", (data) => {
   console.log("Se actualizó reliquiaJefe por: " + data);
 });
 
-startServer();
+startServer(Number(process.env.PORT || 3000));

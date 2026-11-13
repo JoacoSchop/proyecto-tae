@@ -3,9 +3,10 @@
     "version": "1.0.0",
     "type": "module",
     "description": "Juego",
-    "main": "index.js",
+    "main": "saving.js",
     "scripts": {
-        "dev": "node saving.js"
+        "dev": "node saving.js",
+        "start": "node saving.js"
     },
     "author": "Julian G, Joaquin S, Ivan R y lorenzo L",
     "license": "ISC",

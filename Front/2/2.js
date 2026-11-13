@@ -185,43 +185,28 @@ jon.addEventListener("click", mostrarJon);
 bear.addEventListener("click", mostrarBear);
 pick.addEventListener("click", mostrarPick);
 atras.addEventListener("click", volver);
-let personaje = "";
-avanzar.addEventListener("click", () => {
-  if (siMago) {
-    personaje = "mago";
-    sessionStorage.clear()
-    avanzarMapa();
-  } else if (siBear) {
-    personaje = "bear";
-    sessionStorage.clear()
-    avanzarMapa();
-  } else if (siPick) {
-    personaje = "pick";
-    sessionStorage.clear()
-    avanzarMapa();
-  } else if (siJon) {
-    personaje = "jon";
-    sessionStorage.clear()
-    avanzarMapa();
-  }
-  postEvent("personaje", personaje);
-  postEvent("modificar-mazo", { accion: "agregar", carta: "golpe" });
-  postEvent("modificar-mazo", { accion: "agregar", carta: "golpe" });
-  postEvent("modificar-mazo", { accion: "agregar", carta: "golpe" });
-  postEvent("modificar-mazo", { accion: "agregar", carta: "golpe" });
-  postEvent("modificar-mazo", { accion: "agregar", carta: "golpe" });
-  postEvent("modificar-mazo", { accion: "agregar", carta: "escudo" });
-  postEvent("modificar-mazo", { accion: "agregar", carta: "escudo" });
-  postEvent("modificar-mazo", { accion: "agregar", carta: "escudo" });
-  postEvent("modificar-mazo", { accion: "agregar", carta: "escudo" });
-  postEvent("modificar-mazo", { accion: "agregar", carta: "escudo" });
-  postEvent("modificar-mazo", { accion: "agregar", carta: "Garrote" });
+avanzar.addEventListener("click", async () => {
+  const personaje = siMago ? "mago" : siBear ? "bear" : siPick ? "pick" : siJon ? "jon" : "";
+  if (!personaje || !socket.connected || avanzar.disabled) return;
 
-});
-window.addEventListener("DOMContentLoaded", () => {
-  console.log("✅ Conectado a Soquetic correctamente.");
-  setTimeout(() => {
-    postEvent("reiniciar", true);
-  }, 500);
+  avanzar.disabled = true;
+  try {
+    await postEventAsync("reiniciar", true);
+    await postEventAsync("personaje", personaje);
+    const cartas = [
+      "golpe", "golpe", "golpe", "golpe", "golpe",
+      "escudo", "escudo", "escudo", "escudo", "Garrote",
+    ];
+    for (const carta of cartas) {
+      await postEventAsync("modificar-mazo", { accion: "agregar", carta });
+    }
+    sessionStorage.clear();
+    avanzarMapa();
+  } catch (error) {
+    console.error(error);
+    alert("No se pudo iniciar la partida. Volvé a intentar.");
+  } finally {
+    avanzar.disabled = false;
+  }
 });
 connect2Server();
